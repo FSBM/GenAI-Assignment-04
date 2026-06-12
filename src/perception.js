@@ -1,17 +1,17 @@
 import path from 'node:path'
-import { SCREENSHOT_DIR } from '../config'
-import { log } from './logger'
+import { SCREENSHOT_DIR } from '../config.js'
+import { log } from './logger.js'
 
 
 
 export async function getInteractiveElements(page) {
   const els = await page.evaluate(() => {
-    const selectors = 'input, textarea, select, button, a[href], [role="button], [contenteditable=true]';
+    const selectors = 'input, textarea, select, button, a[href], [role="button"], [contenteditable=true]';
     const out = [];
-    const i = 0;
-    for (const element of document.querySelector(selectors)) {
+    let i = 0;
+    for (const element of document.querySelectorAll(selectors)) {
       const r = element.getBoundingClientRect();
-      const s = geComputedStyle(element);
+      const s = getComputedStyle(element);
       const visible = r.width > 1 && r.height > 1 && s.visibility !== "hidden" && s.opacity > 0 && s.display !== 'none' &&
         r.bottom > 0 && r.right > 0 && r.top < innerHeight && r.left < innerWidth;
 
@@ -19,7 +19,7 @@ export async function getInteractiveElements(page) {
 
       let label = element.getAttribute('aria-label') || element.getAttribute('placeholder') || '';
       if (!label && element.id) {
-        const l = document.querySelector('label[for="' + CSS.escape(element.id) + "]");
+        const l = document.querySelector('label[for="' + CSS.escape(element.id) + '"]');
         if (l) label = l.innerText;
       }
       if (!label) label = (element.innerText || element.value || '').trim();
@@ -51,8 +51,8 @@ export async function annotatedScreenshots(page, elements, name = 'annotated') {
     boxing_div.className = '__agent_mark';
     Object.assign(boxing_div.style, {
       position: 'fixed', left: element.x - element.w / 2 + 'px', top: element.y - element.h / 2 + 'px',
-      width: element.w + 'px', height: element.h + 'p', border: '2px solid #e11',
-      zIndex:2147483647, PointerEvent:'none', boxSizing:'border-box'
+      width: element.w + 'px', height: element.h + 'px', border: '2px solid #e11',
+      zIndex:2147483647, pointerEvents:'none', boxSizing:'border-box'
     })
     const num_labeling = document.createElement('span');
     num_labeling.textContent = element.index;
@@ -61,7 +61,7 @@ export async function annotatedScreenshots(page, elements, name = 'annotated') {
       color:'#fff',padding:'0px 4px'
     })
     boxing_div.appendChild(num_labeling);
-    document.appendChild(boxing_div);
+    document.body.appendChild(boxing_div);
   }
   }, elements);
 

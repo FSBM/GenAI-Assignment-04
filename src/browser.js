@@ -1,7 +1,7 @@
 import { chromium } from "playwright";
 import path from 'node:path';
-import { HEADLESS, VIEWPORT, DEFAULT_TIMEOUT_MS, SCREENSHOT_DIR, getTimeStamp } from "../config";
-import { log } from "./logger";
+import { HEADLESS, VIEWPORT, DEFAULT_TIMEOUT_MS, SCREENSHOT_DIR, getTimeStamp } from "../config.js";
+import { log } from "./logger.js";
 
 //here i'm creating a browser class and it
 //functions(methods) to build
@@ -28,7 +28,7 @@ export class BrowserController {
       viewport: VIEWPORT,
       deviceScaleFactor: 1,
     });
-    this.context.setDefaultTimeour(DEFAULT_TIMEOUT_MS);
+    this.context.setDefaultTimeout(DEFAULT_TIMEOUT_MS);
     this.page = await this.context.newPage();
 
     return this.page;
@@ -52,12 +52,12 @@ export class BrowserController {
     log.info(`Screenshot saved as ${S_p}`)
   }
   
-  async clickAt() {
+  async clickAt(x, y) {
     log.info(`Click at (${x}, ${y})`);
     await this.page.mouse.click(x, y);
   }
 
-  async doubleClickAt() {
+  async doubleClickAt(x, y) {
     log.info(`Double-click at (${x}, ${y})`);
     await this.page.mouse.dblclick(x, y);
   }

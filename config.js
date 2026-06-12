@@ -19,7 +19,7 @@ export const GEMINI_MODEL = process.env.GEMINI_MODEL;
 
 
 export const HEADLESS = process.env.HEADLESS === 'true';
-export const VIEWPORT = { width: 1280, heightL: 800 };
+export const VIEWPORT = { width: 1280, height: 800 };
 export const DEFAULT_TIMEOUT_MS = 30_000;
 
 export const MAX_STEPS = 20;

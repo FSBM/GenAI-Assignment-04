@@ -64,7 +64,7 @@ function emit(level, parts) {
     );
 }
 
-export const logger = {
+export const log = {
     info: (...parts) => emit('INFO', parts),
     warn: (...parts) => emit('WARN', parts),
     error: (...parts) => emit('ERROR', parts),
