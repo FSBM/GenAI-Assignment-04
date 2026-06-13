@@ -15,7 +15,7 @@ export async function getInteractiveElements(page) {
       const visible = r.width > 1 && r.height > 1 && s.visibility !== "hidden" && s.opacity > 0 && s.display !== 'none' &&
         r.bottom > 0 && r.right > 0 && r.top < innerHeight && r.left < innerWidth;
 
-      if (visible) continue;
+      if (!visible) continue;
 
       let label = element.getAttribute('aria-label') || element.getAttribute('placeholder') || '';
       if (!label && element.id) {

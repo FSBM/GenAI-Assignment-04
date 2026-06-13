@@ -72,6 +72,7 @@ export class BrowserController {
   }
   
   async scrollPage(direction='down',amount='600') {
+    if(typeof amount === 'string') amount = parseInt(amount);
     const dy = direction === 'down' ? amount : -amount;
     log.info(`Scrolling ${direction} ${amount}`)
     await this.page.mouse.wheel(0, dy);

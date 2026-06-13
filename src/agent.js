@@ -23,7 +23,7 @@ export class Agent{
         log.info(`---------- STEP ${step} ----------`);
 
         const elements = await perception.getInteractiveElements(this.browser.page);
-        const screenshot = await perception.annotatedScreenshots(this.browser.page, `step_${String(step).padStart(2, '0')}`);
+        const screenshot = await perception.annotatedScreenshots(this.browser.page, elements, `step_${String(step).padStart(2, '0')}`);
         const elementsText = perception.elementsToText(elements)
 
         const decision = await this.brain.decide(task, elementsText, screenshot, this.history.join('\n'));
@@ -83,5 +83,6 @@ export class Agent{
       await this.browser.takeScreenshot('error');
       this.history.push(`Error on ${action}: ${err.message}`)
     }
+    return true
   }
 }
