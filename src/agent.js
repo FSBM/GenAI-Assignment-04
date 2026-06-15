@@ -17,6 +17,7 @@ export class Agent{
     try {
       await this.browser.openBrowser();
       await this.browser.navigateToURL(url);
+      await this.browser.scrollToTop();  
 
       let done = false;
       for (let step = 1; step <= MAX_STEPS; step++) {

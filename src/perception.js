@@ -17,18 +17,28 @@ export async function getInteractiveElements(page) {
 
       if (!visible) continue;
 
-      let label = element.getAttribute('aria-label') || element.getAttribute('placeholder') || '';
+      let label = element.getAttribute('aria-label') || '';
       if (!label && element.id) {
         const l = document.querySelector('label[for="' + CSS.escape(element.id) + '"]');
         if (l) label = l.innerText;
       }
+      if (!label) {
+        const labelledby = element.getAttribute('aria-labelledby');
+        const ref = labelledby && document.getElementById(labelledby);
+        if (ref) label = ref.innerText;
+      }
+      if (!label) label = element.getAttribute('placeholder') || '';
       if (!label) label = (element.innerText || element.value || '').trim();
+
+
+      const value = (element.value || '').replace(/\s+/g, ' ').slice(0, 80);
 
       out.push({
         index: i++,
         tag: element.tagName.toLowerCase(),
         type: element.getAttribute('type') || '',
         label: (label || '').replace(/\s+/g, ' ').slice(0, 60),
+        value,
         x: Math.round(r.left + r.width / 2),
         y: Math.round(r.top + r.height / 2),
         w: Math.round(r.width),
@@ -76,6 +86,7 @@ export async function annotatedScreenshots(page, elements, name = 'annotated') {
 export function elementsToText(elements) {
   return elements.map((e) => {
     const typeSuffix = e.type ? '/' + e.type : '';
-    return `[${e.index}] <${e.tag}${typeSuffix}> "${e.label}" at (${e.x},${e.y})`;
+    const valuePart = e.value ? ` value="${e.value}"` : '';
+    return `[${e.index}] <${e.tag}${typeSuffix}> "${e.label}"${valuePart} at (${e.x},${e.y})`;
   }).join('\n');
 }

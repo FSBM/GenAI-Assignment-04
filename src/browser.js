@@ -78,6 +78,11 @@ export class BrowserController {
     await this.page.mouse.wheel(0, dy);
   }
 
+  async scrollToTop() {
+    log.info('Scrolling to top of page');
+    await this.page.evaluate(() => window.scrollTo(0, 0));
+  }
+
   async closeBrowser() {
     log.info('Closing browser');
     if (this.context) await this.context.close();
